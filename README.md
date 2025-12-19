@@ -33,7 +33,7 @@ edustack/
 ├── package.json                # Project dependencies and scripts
 └── README.md                   # Project documentation
 
-
+```
 
 Below is a **clean, submission-ready README section** that **directly answers the prompt**.
 You can copy–paste this into your `README.md` without modification.
@@ -109,3 +109,106 @@ These confirm that strict type checking, linting, formatting, and pre-commit enf
 
 
 
+Below is a **clean, submission-ready README section** that directly satisfies all four points in the prompt. You can paste this into your `README.md` as-is.
+
+---
+
+## Environment Variables and Configuration
+
+This project uses environment variables to manage configuration and sensitive credentials securely. To prevent accidental exposure of secrets and to clearly separate server and client concerns, we follow Next.js environment variable best practices.
+
+---
+
+## Purpose of Each Environment Variable
+
+### Server-Side Variables (Private)
+
+These variables are **only available on the server** and are never exposed to the browser.
+
+* **DATABASE_URL**
+  PostgreSQL connection string used by Prisma to connect to the database.
+
+* **REDIS_URL**
+  Connection URL for the Redis instance used for caching.
+
+* **NEXTAUTH_SECRET**
+  Secret key used to sign and encrypt authentication tokens and sessions.
+
+* **EMAIL_SERVER_URL**
+  SMTP configuration used to send transactional emails (notifications, onboarding).
+
+* **S3_ACCESS_KEY**
+  Access key for cloud storage authentication.
+
+* **S3_SECRET_KEY**
+  Secret key for cloud storage authentication.
+
+* **S3_BUCKET_NAME**
+  Name of the cloud storage bucket used for file uploads.
+
+---
+
+### Client-Side Variables (Safe to Expose)
+
+These variables are explicitly exposed to the browser and must be prefixed with `NEXT_PUBLIC_`.
+
+* **NEXT_PUBLIC_API_BASE_URL**
+  Base URL used by client-side components to communicate with the backend.
+
+---
+
+## Server-Side vs Client-Side Access Rules
+
+Next.js enforces strict boundaries for environment variable usage:
+
+* Variables **without** the `NEXT_PUBLIC_` prefix are accessible only on the server.
+* Variables **with** the `NEXT_PUBLIC_` prefix are included in the client-side bundle.
+
+Examples:
+
+```ts
+// Server-side only
+const dbUrl = process.env.DATABASE_URL;
+
+// Client-safe
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+```
+
+Server-only secrets are never imported or referenced in client components or hooks.
+
+---
+
+## Replicating the Setup Using `.env.example`
+
+The repository includes a `.env.example` file that acts as a template for all required environment variables.
+
+To replicate the setup locally:
+
+1. Copy the example file:
+
+   ```bash
+   cp .env.example .env.local
+   ```
+2. Replace placeholder values with your local credentials.
+3. Run the application normally using `npm run dev`.
+
+The `.env.local` file is ignored by Git and remains local to each developer’s environment.
+
+---
+
+## Common Pitfalls Avoided
+
+* **Accidentally exposing secrets**
+  All sensitive variables are server-only and never prefixed with `NEXT_PUBLIC_`.
+
+* **Forgetting the `NEXT_PUBLIC_` prefix**
+  Client-side variables are clearly documented and explicitly prefixed to ensure availability in the browser.
+
+* **Using secrets in client components**
+  Server-only variables are accessed exclusively in server components, API routes, or server actions.
+
+* **Runtime vs build-time issues**
+  Environment variables required at runtime are validated before use to avoid undefined errors during execution.
+
+* **Committing sensitive files**
+  `.env.local` is excluded from version control, ensuring no credentials are leaked.
