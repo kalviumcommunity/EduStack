@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EduStack
 
-## Getting Started
+## Project Overview
 
-First, run the development server:
+EduStack is a lightweight Learning Management System (LMS) designed for small coaching institutes.  
+Many institutes rely on fragmented tools such as messaging apps, spreadsheets, and shared drives to manage courses, students, assignments, and attendance. EduStack centralizes these core academic workflows into a single, simple, and efficient web application.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+The goal of this project is to deliver a scalable, role-based LMS that focuses on real-world usability rather than unnecessary complexity.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Folder Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```text
+edustack/
+├── app/                        # Next.js App Router (pages, layouts, routes)
+│   ├── auth/                   # Authentication pages (login, register)
+│   ├── dashboard/              # Role-based dashboards (admin, teacher, student)
+│   ├── courses/                # Course-related pages and dynamic routes
+│   ├── api/                    # API routes (auth, courses, assignments, attendance)
+│   ├── layout.tsx              # Root layout
+│   └── page.tsx                # Public landing page
+│
+├── components/                 # Reusable UI components (Navbar, Forms, Tables)
+├── lib/                        # Shared utilities (Prisma client, auth helpers)
+├── services/                   # Business logic and service-layer abstractions
+├── prisma/                     # Prisma schema and migration files
+│   └── schema.prisma
+│
+├── public/                     # Static assets
+├── styles/                     # Global styles
+├── .env.example                # Environment variable template
+├── package.json                # Project dependencies and scripts
+└── README.md                   # Project documentation
