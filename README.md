@@ -424,3 +424,20 @@ The submission includes:
 Prisma’s generated queries give us strong type safety, compile-time validation, and consistent query patterns, which significantly reduces runtime errors compared to writing raw SQL.
 It also improves developer productivity by abstracting complex joins and relationships.
 However, for highly optimized queries, complex reporting, or database-specific features, raw SQL can still be preferred for maximum control and performance.
+
+
+## Production Migration Safety Considerations
+
+Before running any database migration in a live production environment, several precautions would be taken to ensure that no data is lost or corrupted.
+
+First, a full database backup would be created and verified. This ensures that data can be restored quickly in case a migration fails or produces unintended results.
+
+Second, all schema changes would be tested in a staging environment that mirrors production as closely as possible. Migrations would be validated against real-world data volumes and query patterns before being promoted.
+
+Third, migrations would be reviewed manually, including inspection of the generated SQL, to confirm that destructive operations (such as dropping columns or tables) are intentional and safe.
+
+Fourth, migrations would be executed during a planned maintenance window or low-traffic period to minimize user impact. Application writes may be temporarily paused to avoid partial updates or inconsistent states.
+
+Finally, monitoring and logging would be enabled during and after the migration. Application health, error rates, and database performance would be closely observed, with a rollback plan ready if issues are detected.
+
+These steps ensure migrations are predictable, reversible, and safe, even as the application scales and evolves.

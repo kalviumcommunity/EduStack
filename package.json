@@ -9,6 +9,9 @@
     "lint": "eslint",
     "prepare": "husky install"
   },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "dependencies": {
     "next": "16.1.0",
     "react": "19.2.3",
@@ -30,6 +33,7 @@
     "prettier": "^3.7.4",
     "prisma": "^5.22.0",
     "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   },
   "lint-staged": {
