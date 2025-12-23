@@ -268,3 +268,155 @@ Docker Compose allows a new developer to run the entire application stack with a
 Instead of manually installing Node.js, PostgreSQL, Redis, and configuring environment variables, the developer simply runs `docker-compose up` and gets an identical environment.  
 This reduces onboarding time, eliminates setup errors, and ensures everyone works with the same configuration, enabling the team to move faster with confidence.
 
+
+Below is a **clean, submission-ready README section** you can paste directly into your `README.md`.
+It is written to exactly match the requirements you listed, with no extra fluff.
+
+---
+
+### Prisma Schema (ER Design)
+
+The database schema is designed around a lightweight Learning Management System (LMS) domain.
+The core entities include **User**, **Course**, **Enrollment**, **Assignment**, **Submission**, **Material**, and **Attendance**.
+
+**Prisma schema excerpt:**
+
+```prisma
+model User {
+  id          Int          @id @default(autoincrement())
+  name        String
+  email       String       @unique
+  role        Role
+  createdAt   DateTime     @default(now())
+
+  courses     Course[]     @relation("TeacherCourses")
+  enrollments Enrollment[]
+  submissions Submission[]
+}
+
+model Course {
+  id          Int          @id @default(autoincrement())
+  title       String
+  description String?
+  teacherId   Int
+  createdAt   DateTime     @default(now())
+
+  teacher     User         @relation("TeacherCourses", fields: [teacherId], references: [id], onDelete: Cascade)
+  enrollments Enrollment[]
+  assignments Assignment[]
+}
+```
+
+This schema directly maps to an ER model where users (teachers and students) interact with courses and related academic data.
+
+---
+
+### Keys, Constraints, and Relationships
+
+* **Primary Keys (PK):**
+
+  * Each table uses an auto-incrementing `id` as the primary key.
+* **Foreign Keys (FK):**
+
+  * `Course.teacherId → User.id`
+  * `Enrollment.userId → User.id`
+  * `Enrollment.courseId → Course.id`
+  * `Assignment.courseId → Course.id`
+  * `Submission.assignmentId → Assignment.id`
+* **Constraints:**
+
+  * `User.email` is marked `@unique`
+  * Composite uniqueness prevents duplicate enrollments and submissions
+  * `onDelete: Cascade` ensures referential integrity
+* **Indexes:**
+
+  * Indexes on frequently queried columns such as `courseId` and composite keys improve read performance.
+
+---
+
+### Normalization Approach
+
+The schema follows standard normalization principles:
+
+* **1NF:** All attributes contain atomic values (no repeating groups or arrays).
+* **2NF:** All non-key attributes depend on the full primary key.
+* **3NF:** No transitive dependencies exist between non-key attributes.
+
+Redundancy is avoided by separating many-to-many relationships (e.g., enrollments, submissions) into dedicated tables instead of duplicating data.
+
+---
+
+### Applying Migrations
+
+Database tables are created using Prisma migrations:
+
+```bash
+npx prisma migrate dev --name init_schema
+```
+
+This command:
+
+* Validates the schema
+* Applies migrations to PostgreSQL
+* Generates the Prisma Client
+
+---
+
+### Verifying the Database
+
+Prisma Studio is used to visually verify tables and relationships:
+
+```bash
+npx prisma studio
+```
+
+Screenshots of Prisma Studio showing the created tables are included in the submission.
+
+---
+
+### Seeding the Database
+
+The database is seeded with sample data (users, courses, and assignments) to support local testing and UI development.
+
+Example seed actions:
+
+* Create a teacher user
+* Create a course
+* Add an assignment linked to the course
+
+Screenshots or logs of seeded data are included as evidence.
+
+---
+
+### Scalability Considerations
+
+This design supports scalability by:
+
+* Keeping entities loosely coupled
+* Using indexed foreign keys for efficient joins
+* Supporting many-to-many relationships without duplication
+* Allowing horizontal growth (more users, courses, submissions) without schema changes
+
+---
+
+### Common Queries and Optimization
+
+The most common queries include:
+
+* Fetching courses for a teacher or student
+* Listing assignments for a course
+* Retrieving submissions for an assignment
+* Checking enrollments and attendance
+
+Indexes and normalized relations ensure these queries remain performant as data volume increases.
+
+---
+
+### Evidence
+
+The submission includes:
+
+* Prisma migration success logs
+* Prisma Studio screenshots
+* Seeded data verification
+

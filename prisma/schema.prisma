@@ -1,0 +1,102 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+model User {
+  id          Int          @id @default(autoincrement())
+  name        String
+  email       String       @unique
+  role        Role
+  createdAt   DateTime     @default(now())
+
+  courses     Course[]     @relation("TeacherCourses")
+  enrollments Enrollment[]
+  submissions Submission[]
+}
+
+model Course {
+  id          Int          @id @default(autoincrement())
+  title       String
+  description String?
+  teacherId   Int
+  createdAt   DateTime     @default(now())
+
+  teacher     User         @relation("TeacherCourses", fields: [teacherId], references: [id], onDelete: Cascade)
+  enrollments Enrollment[]
+  materials   Material[]
+  assignments Assignment[]
+  attendance  Attendance[]
+}
+
+model Enrollment {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  courseId  Int
+  enrolledAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@index([courseId])
+}
+
+model Material {
+  id        Int      @id @default(autoincrement())
+  title     String
+  fileUrl   String
+  courseId  Int
+  uploadedAt DateTime @default(now())
+
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([courseId])
+}
+
+model Assignment {
+  id        Int      @id @default(autoincrement())
+  title     String
+  dueDate   DateTime
+  courseId  Int
+
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  submissions Submission[]
+
+  @@index([courseId])
+}
+
+model Submission {
+  id           Int      @id @default(autoincrement())
+  fileUrl      String
+  studentId    Int
+  assignmentId Int
+  submittedAt  DateTime @default(now())
+
+  student      User     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  assignment   Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, assignmentId])
+}
+
+model Attendance {
+  id        Int      @id @default(autoincrement())
+  courseId  Int
+  date      DateTime
+  present   Boolean
+
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@index([courseId, date])
+}
+
+enum Role {
+  ADMIN
+  TEACHER
+  STUDENT
+}
