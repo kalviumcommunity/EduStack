@@ -33,7 +33,7 @@ edustack/
 ├── package.json                # Project dependencies and scripts
 └── README.md                   # Project documentation
 
-```
+<!-- ``` -->
 
 Below is a **clean, submission-ready README section** that **directly answers the prompt**.
 You can copy–paste this into your `README.md` without modification.
@@ -212,3 +212,59 @@ The `.env.local` file is ignored by Git and remains local to each developer’s 
 
 * **Committing sensitive files**
   `.env.local` is excluded from version control, ensuring no credentials are leaked.
+
+## Docker Setup – PR Submission and Video Demo
+
+### Pull Request
+This Pull Request includes the Docker configuration required to run the application consistently across all environments.
+
+**Included files:**
+- `Dockerfile` – Defines how the Next.js application is built and run inside a container.
+- `docker-compose.yml` – Orchestrates the application, PostgreSQL, and Redis services in a shared network.
+
+---
+
+## Video Demo
+
+A 1–2 minute demo video has been recorded and uploaded to Google Drive.
+
+**Video Link:**  
+[Paste Google Drive link here]  
+(Access set to **“Anyone with the link can edit”**)
+
+---
+
+### 1. Docker Configuration
+- Overview of the `Dockerfile` and its role in building and running the Next.js application.
+- Explanation of the `docker-compose.yml` file and how it defines:
+  - The application container
+  - PostgreSQL database container
+  - Redis cache container
+  - Shared Docker network and environment variables
+
+### 2. Running Containers
+- Execution of `docker-compose up --build`
+- Verification that all three containers are running:
+  - Application container
+  - PostgreSQL container
+  - Redis container
+- Application accessible at `http://localhost:3000`
+
+### 3. Consistency Across Environments
+- Explanation of how Docker Compose ensures:
+  - Identical dependencies and runtime versions
+  - No local environment or port conflicts
+  - Predictable behavior across all team members’ machines
+
+---
+
+## Reflection
+
+**Question:**  
+*If your entire team had to onboard a new developer tomorrow, how would Docker Compose make that process faster and smoother?*
+
+**Answer:**  
+Docker Compose allows a new developer to run the entire application stack with a single command.  
+Instead of manually installing Node.js, PostgreSQL, Redis, and configuring environment variables, the developer simply runs `docker-compose up` and gets an identical environment.  
+This reduces onboarding time, eliminates setup errors, and ensures everyone works with the same configuration, enabling the team to move faster with confidence.
+
