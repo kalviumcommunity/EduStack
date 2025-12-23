@@ -420,3 +420,7 @@ The submission includes:
 * Prisma Studio screenshots
 * Seeded data verification
 
+### Prisma Initilization
+Prisma’s generated queries give us strong type safety, compile-time validation, and consistent query patterns, which significantly reduces runtime errors compared to writing raw SQL.
+It also improves developer productivity by abstracting complex joins and relationships.
+However, for highly optimized queries, complex reporting, or database-specific features, raw SQL can still be preferred for maximum control and performance.
