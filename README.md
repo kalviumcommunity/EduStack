@@ -531,3 +531,47 @@ curl -X POST http://localhost:3000/api/users \
     "name": "Charlie",
     "email": "charlie@example.com"
   }'
+
+
+## Standardized API Responses
+
+All API endpoints follow a unified response structure to ensure predictable client behavior and consistent error handling.
+
+### Response Format
+```json
+{
+  "success": boolean,
+  "message": string,
+  "data": any,
+  "error": {
+    "code": string,
+    "details"?: any
+  },
+  "timestamp": string
+}
+
+
+
+This assignment focuses on building a **clean RESTful API**, **optimized database schema**, and **consistent backend architecture** using Next.js App Router and Prisma.
+
+---
+
+## Objective
+
+- Design RESTful API routes using Next.js file-based routing
+- Implement standardized API responses
+- Optimize Prisma schema for performance
+- Apply migrations and indexing
+- Demonstrate transactions and query optimization
+- Follow professional backend conventions
+
+---
+
+## Tech Stack
+
+- Next.js (App Router)
+- TypeScript
+- PostgreSQL
+- Prisma ORM
+- Docker & Docker Compose
+- pnpm
