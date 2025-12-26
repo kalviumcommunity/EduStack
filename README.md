@@ -609,3 +609,27 @@ export const userSchema = z.object({
   email: z.string().email("Invalid email address"),
   age: z.number().min(18, "User must be 18 or older"),
 });
+
+---
+
+## User Authentication
+
+This project implements secure **user authentication** using modern backend best practices. Authentication verifies user identity before allowing access to protected resources.
+
+### Signup & Login Flow
+
+* **Signup** securely hashes user passwords using **bcrypt** before storing them in the database.
+* **Login** verifies credentials and issues a **JWT (JSON Web Token)** upon successful authentication.
+* Passwords are never stored in plain text, protecting users even if the database is compromised.
+
+### Token-Based Security
+
+Authenticated users receive a signed JWT token with an expiration time. Protected API routes validate this token before granting access, ensuring only authenticated users can access sensitive data.
+
+### Input Validation & Error Handling
+
+All authentication endpoints validate incoming data using **Zod** schemas. Invalid requests return structured error responses, preventing malformed or insecure data from reaching the database.
+
+This approach ensures security, consistency, and scalability in user authentication.
+
+---
