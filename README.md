@@ -441,3 +441,45 @@ Fourth, migrations would be executed during a planned maintenance window or low-
 Finally, monitoring and logging would be enabled during and after the migration. Application health, error rates, and database performance would be closely observed, with a rollback plan ready if issues are detected.
 
 These steps ensure migrations are predictable, reversible, and safe, even as the application scales and evolves.
+
+
+## Transactions, Performance Optimization, and Query Tuning
+
+### 1. Database Transactions
+Transactions are used to ensure atomicity and consistency when multiple database operations must succeed or fail together. In this project, Prisma’s `$transaction()` API is used to group related operations such as creating records and updating related data. If any operation within the transaction fails, Prisma automatically rolls back all changes, preventing partial or inconsistent writes.
+
+This approach is critical for real-world scenarios like order placement, inventory updates, or enrollment workflows, where data integrity must be guaranteed.
+
+---
+
+### 2. Rollbacks and Error Handling
+All transactions are wrapped in `try-catch` blocks to handle failures gracefully. When an error occurs (for example, due to invalid data or a constraint violation), Prisma aborts the transaction and restores the database to its previous state. Rollback behavior was verified by intentionally triggering errors and confirming that no partial records were persisted in the database.
+
+This ensures the system remains reliable even under failure conditions.
+
+---
+
+### 3. Query Optimization
+Query performance is improved by following these practices:
+- **Avoid over-fetching:** Only required fields are selected instead of loading full relational graphs.
+- **Batch operations:** Bulk inserts are performed using `createMany` to reduce round trips to the database.
+- **Pagination:** Large result sets are paginated using `skip` and `take` with deterministic ordering.
+
+These optimizations reduce query cost, memory usage, and response times.
+
+---
+
+### 4. Indexing Strategy
+Indexes are added to frequently queried fields such as foreign keys and status columns. Indexes significantly improve lookup and filtering performance for common access patterns. Schema changes related to indexing are applied using Prisma migrations to keep the database schema versioned and consistent.
+
+---
+
+### 5. Monitoring and Benchmarking
+Prisma query logging is enabled during development to observe generated SQL and execution behavior. Query performance is compared before and after adding indexes using database-level analysis tools such as `EXPLAIN ANALYZE`. Prisma Studio is also used to visualize queries and validate data access patterns.
+
+For production environments, database monitoring tools (such as managed database performance dashboards) would be used to track slow queries and optimize further.
+
+---
+
+### Summary
+By combining transactions, proper error handling, query optimization, indexing, and monitoring, the data layer is designed to be reliable, performant, and scalable. These practices ensure data consistency while supporting efficient query execution as the application grows.
