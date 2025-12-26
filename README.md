@@ -575,3 +575,37 @@ This assignment focuses on building a **clean RESTful API**, **optimized databas
 - Prisma ORM
 - Docker & Docker Compose
 - pnpm
+
+---
+
+## Input Validation & Error Handling
+
+### Why Input Validation Is Important
+
+All API endpoints validate incoming data before processing it. This prevents:
+- Invalid or malformed requests
+- Corrupted database records
+- Unpredictable runtime errors
+- Security and data integrity issues
+
+Validation is handled at the API boundary, ensuring only trusted data reaches business logic or the database.
+
+---
+
+## Zod-Based Validation
+
+We use **Zod** for schema-based input validation.
+
+Each API route defines or imports a Zod schema that represents the expected request payload. Incoming data is validated against this schema before execution.
+
+### Example Schema
+
+```ts
+// src/lib/schemas/userSchema.ts
+import { z } from "zod";
+
+export const userSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters long"),
+  email: z.string().email("Invalid email address"),
+  age: z.number().min(18, "User must be 18 or older"),
+});
