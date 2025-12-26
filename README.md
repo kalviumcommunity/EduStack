@@ -483,3 +483,51 @@ For production environments, database monitoring tools (such as managed database
 
 ### Summary
 By combining transactions, proper error handling, query optimization, indexing, and monitoring, the data layer is designed to be reliable, performant, and scalable. These practices ensure data consistency while supporting efficient query execution as the application grows.
+
+
+## API Design & Routing
+
+This project uses **Next.js App Router file-based routing** to implement RESTful APIs.  
+Every folder inside `src/app/api/` maps directly to an HTTP endpoint, ensuring a clear and predictable API structure.
+
+---
+
+### API Route Hierarchy
+
+| Endpoint | Description |
+|-------|------------|
+| `GET /api/users` | Fetch all users |
+| `POST /api/users` | Create a new user |
+| `GET /api/users/:id` | Fetch a specific user |
+| `PUT /api/users/:id` | Update a user |
+| `DELETE /api/users/:id` | Delete a user |
+| `GET /api/courses` | Fetch courses (paginated) |
+| `POST /api/courses` | Create a new course |
+| `GET /api/courses/:id` | Fetch course details |
+| `POST /api/enrollments` | Enroll a student in a course |
+
+All routes follow **plural, lowercase, resource-based naming**, avoiding verbs in URLs.
+
+---
+
+### HTTP Verbs & Resource Actions
+
+| HTTP Method | Action | Example |
+|----------|------|--------|
+| GET | Read data | `/api/users` |
+| POST | Create data | `/api/users` |
+| PUT | Update data | `/api/users/1` |
+| DELETE | Remove data | `/api/users/1` |
+
+---
+
+### Sample Requests & Responses
+
+#### Create User
+```bash
+curl -X POST http://localhost:3000/api/users \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Charlie",
+    "email": "charlie@example.com"
+  }'
