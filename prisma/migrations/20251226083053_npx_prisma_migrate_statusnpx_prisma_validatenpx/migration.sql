@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "Course" ALTER COLUMN "updatedAt" DROP DEFAULT;
+
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "role" SET DEFAULT 'STUDENT',
+ALTER COLUMN "updatedAt" DROP DEFAULT;

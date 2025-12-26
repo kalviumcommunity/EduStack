@@ -7,17 +7,21 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
 model User {
   id          Int          @id @default(autoincrement())
   name        String
   email       String       @unique
-  role        Role
+  role        Role         @default(STUDENT)
   createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 
-  courses     Course[]     @relation("TeacherCourses")
-  enrollments Enrollment[]
-  submissions Submission[]
+  // Relations
+  taughtCourses Course[]   @relation("TeacherCourses")
+  enrollments   Enrollment[]
+  submissions   Submission[]
+  attendance    Attendance[]
+
+  @@index([role])
 }
 
 model Course {
@@ -26,37 +30,43 @@ model Course {
   description String?
   teacherId   Int
   createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 
   teacher     User         @relation("TeacherCourses", fields: [teacherId], references: [id], onDelete: Cascade)
   enrollments Enrollment[]
   materials   Material[]
   assignments Assignment[]
   attendance  Attendance[]
+
+  @@index([teacherId])
+  @@index([createdAt])
 }
 
 model Enrollment {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  courseId  Int
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  courseId   Int
   enrolledAt DateTime @default(now())
 
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@unique([userId, courseId])
   @@index([courseId])
+  @@index([userId])
 }
 
 model Material {
-  id        Int      @id @default(autoincrement())
-  title     String
-  fileUrl   String
-  courseId  Int
+  id         Int      @id @default(autoincrement())
+  title      String
+  fileUrl    String
+  courseId   Int
   uploadedAt DateTime @default(now())
 
-  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@index([courseId])
+  @@index([uploadedAt])
 }
 
 model Assignment {
@@ -64,11 +74,13 @@ model Assignment {
   title     String
   dueDate   DateTime
   courseId  Int
+  createdAt DateTime @default(now())
 
-  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  course     Course      @relation(fields: [courseId], references: [id], onDelete: Cascade)
   submissions Submission[]
 
   @@index([courseId])
+  @@index([dueDate])
 }
 
 model Submission {
@@ -78,21 +90,27 @@ model Submission {
   assignmentId Int
   submittedAt  DateTime @default(now())
 
-  student      User     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  student      User       @relation(fields: [studentId], references: [id], onDelete: Cascade)
   assignment   Assignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
 
   @@unique([studentId, assignmentId])
+  @@index([assignmentId])
+  @@index([studentId])
 }
 
 model Attendance {
   id        Int      @id @default(autoincrement())
   courseId  Int
+  studentId Int
   date      DateTime
   present   Boolean
 
   course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  student   User     @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
+  @@unique([courseId, studentId, date])
   @@index([courseId, date])
+  @@index([studentId])
 }
 
 enum Role {
