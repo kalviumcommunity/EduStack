@@ -633,3 +633,23 @@ All authentication endpoints validate incoming data using **Zod** schemas. Inval
 This approach ensures security, consistency, and scalability in user authentication.
 
 ---
+
+
+# Reusable Layout & Component Architecture (Next.js)
+
+This project demonstrates a reusable, accessible, and scalable UI architecture built with **Next.js (App Router)**.  
+It includes shared layout components, reusable UI elements, Storybook previews, and documented accessibility and design decisions.
+
+---
+
+## Component Hierarchy
+
+```txt
+RootLayout (app/layout.tsx)
+ └── LayoutWrapper
+      ├── Header
+      ├── Sidebar
+      └── Page Content
+           └── Reusable UI Components
+                ├── Button
+                └── Card
