@@ -653,3 +653,27 @@ RootLayout (app/layout.tsx)
            └── Reusable UI Components
                 ├── Button
                 └── Card
+
+
+# State Management using Context & Hooks (Next.js)
+
+This project implements global state management in a Next.js application using **React Context API** and **custom hooks**.  
+It demonstrates how shared application state such as authentication and UI preferences can be managed efficiently without prop-drilling.
+
+---
+
+## 📂 Folder Structure
+
+```txt
+src/
+ ├── app/
+ │    ├── layout.tsx
+ │    └── page.tsx
+ │
+ ├── context/
+ │    ├── AuthContext.tsx
+ │    └── UIContext.tsx
+ │
+ ├── hooks/
+ │    ├── useAuth.ts
+ │    └── useUI.ts

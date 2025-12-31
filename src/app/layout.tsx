@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { LayoutWrapper } from "@/components";
+import { AuthProvider } from "@/context/AuthContext";
+import { UIProvider } from "@/context/UIContext";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -30,6 +32,9 @@ export default function RootLayout({
       >
         {children}
         <LayoutWrapper>{children}</LayoutWrapper>
+        <AuthProvider>
+          <UIProvider>{children}</UIProvider>
+        </AuthProvider>
       </body>
     </html>
   );
