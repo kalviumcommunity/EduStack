@@ -633,3 +633,117 @@ All authentication endpoints validate incoming data using **Zod** schemas. Inval
 This approach ensures security, consistency, and scalability in user authentication.
 
 ---
+
+Transactional Email Service Integration
+
+EduStack integrates a transactional email system to automatically notify users during important account-related events such as successful signup. These emails improve user trust, onboarding clarity, and system transparency.
+
+Why Transactional Emails Are Used
+
+Transactional emails are system-triggered messages sent in response to user actions. Unlike marketing emails, they are sent automatically by the backend and are critical for reliability and trust.
+
+In EduStack, transactional emails are used for:
+
+Signup confirmation (welcome email)
+
+Future extensibility for password resets and security alerts
+
+Email Provider Selection
+
+The project uses SendGrid as the transactional email provider.
+
+Reason for choice:
+
+Simple API-based integration
+
+Free tier suitable for development and testing
+
+Built-in monitoring for delivery status, bounces, and rate limits
+
+The email service is integrated at the backend level using Next.js App Router API routes.
+
+Configuration and Environment Variables
+
+Email configuration is handled securely using server-side environment variables.
+
+Required variables:
+
+SENDGRID_API_KEY – API key used to authenticate email requests
+
+SENDGRID_SENDER – Verified sender email address
+
+These variables are documented in .env.example and injected at runtime.
+They are never exposed to client-side code.
+
+Email Architecture
+
+The email system follows a clean service-based architecture:
+
+Email service layer:
+src/lib/email/sendEmail.ts
+Handles provider-specific logic and sending emails.
+
+Template layer:
+src/lib/email/templates/
+Contains reusable HTML templates (e.g., welcome email).
+
+This separation allows:
+
+Easy template reuse
+
+Provider replacement (e.g., SendGrid → AWS SES)
+
+Clean API routes without email logic duplication
+
+Signup Email Flow
+
+When a user successfully signs up:
+
+Input is validated using Zod
+
+User is created in the database
+
+A welcome email is triggered asynchronously
+
+Signup response is returned immediately
+
+Email sending is non-blocking.
+If email delivery fails, the signup process still succeeds and the error is logged.
+
+This ensures reliability without impacting user experience.
+
+Sandbox vs Production Behavior
+
+During development:
+
+Emails are sent using SendGrid’s free tier
+
+Delivery is restricted by rate limits
+
+In production:
+
+Verified sender identity is used
+
+SPF/DKIM authentication ensures deliverability
+
+Bounce and delivery status are monitored via the SendGrid dashboard
+
+Rate Limits and Failure Handling
+
+SendGrid free tier enforces daily send limits
+
+Email failures are caught and logged
+
+No retries are performed synchronously to avoid blocking requests
+
+This design keeps API response times fast while preserving observability.
+
+Evidence of Functionality
+
+The submission includes:
+
+Console logs confirming successful email dispatch
+
+Received welcome email screenshots
+
+Verified SendGrid sender configuration

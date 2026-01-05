@@ -4,6 +4,8 @@ import { ZodError } from "zod";
 import { prisma } from "@/lib/prisma";
 import { signupSchema } from "@/lib/schemas/signupSchema";
 import { ERROR_CODES } from "@/lib/errorCodes";
+import { sendEmail } from "@/lib/email/sendemail";
+import { welcomeTemplate } from "@/lib/email/templates/welcome";
 
 export async function POST(req: Request) {
   try {
@@ -27,13 +29,21 @@ export async function POST(req: Request) {
 
     const hashedPassword = await bcrypt.hash(data.password, 10);
 
-    await prisma.user.create({
+    const user = await prisma.user.create({
       data: {
         name: data.fullName,
         email: data.email,
         password: hashedPassword,
         role: data.role,
       },
+    });
+
+    sendEmail({
+      to: user.email,
+      subject: "Welcome to the Platform 🎉",
+      html: welcomeTemplate(user.name),
+    }).catch((err) => {
+      console.error("Welcome email failed:", err);
     });
 
     return NextResponse.json(
