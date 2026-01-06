@@ -677,3 +677,34 @@ src/
  ├── hooks/
  │    ├── useAuth.ts
  │    └── useUI.ts
+
+
+# Client-Side Data Fetching with SWR (Next.js)
+
+This project demonstrates **client-side data fetching using SWR (Stale-While-Revalidate)** in a Next.js application.  
+It showcases caching, background revalidation, optimistic UI updates, and mutation strategies to build a fast and responsive data layer.
+
+---
+
+## 🎯 Objective
+
+The goal of this task is to:
+- Fetch data on the client using SWR hooks
+- Leverage caching and revalidation
+- Implement optimistic UI updates with `mutate()`
+- Observe cache hit vs cache miss behavior
+- Reflect on performance, UX, and error handling trade-offs
+
+---
+
+## 📂 Folder Structure
+
+```txt
+src/
+ ├── app/
+ │    └── users/
+ │         ├── page.tsx
+ │         └── AddUser.tsx
+ │
+ ├── lib/
+ │    └── fetcher.ts
